@@ -1,0 +1,58 @@
+{
+    "bookSourceComment": "一般关键词，搜书名；\n@关键词，搜作者。\n#关键词，搜作者。",
+    "bookSourceGroup": "数据",
+    "bookSourceName": "优书网▪数据",
+    "bookSourceType": 0,
+    "bookSourceUrl": "https:\/\/api.yousuu.com\/",
+    "bookUrlPattern": ".+\/api\/book\/.+",
+    "customOrder": -117809,
+    "enabled": true,
+    "enabledExplore": true,
+    "exploreUrl": "今日▪热门::\/api\/home\/hotJumpBoard\n优秀▪新书::\/api\/home\/recomBook\n男频▪周热::\/api\/home\/channelBooks?channel=male&weekNum=<,{{page*-1+12}}>\n女频▪周热::\/api\/home\/channelBooks?channel=female&weekNum=<,{{page*-1+12}}>\n高分♂月结::\/api\/bookStore\/books? channel=0&sort=score&status=1&update=1&page={{page}}\n高分♀月结::\/api\/bookStore\/books? channel=1&sort=score&status=1&update=1&page={{page}}\n在读∞指数::\/api\/home\/readBoard?page={{page}}\n玄幻▪月结::\/api\/bookStore\/books?classId=2&status=1&update=1&page={{page}}\n奇幻▪月结::\/api\/bookStore\/books?classId=3&status=1&update=1&page={{page}}\n武侠▪月结::\/api\/bookStore\/books?classId=4&status=1&update=1&page={{page}}\n仙侠▪月结::\/api\/bookStore\/books?classId=5&status=1&update=1&page={{page}}\n都市▪月结::\/api\/bookStore\/books?classId=6&status=1&update=1&page={{page}}\n现实▪月结::\/api\/bookStore\/books?classId=7&status=1&update=1&page={{page}}\n军事▪月结::\/api\/bookStore\/books?classId=8&status=1&update=1&page={{page}}\n历史▪月结::\/api\/bookStore\/books?classId=9&status=1&update=1&page={{page}}\n悬疑▪月结::\/api\/bookStore\/books?classId=10&status=1&update=1&page={{page}}\n游戏▪月结::\/api\/bookStore\/books?classId=11&status=1&update=1&page={{page}}\n竞技▪月结::\/api\/bookStore\/books?classId=12&status=1&update=1&page={{page}}\n科幻▪月结::\/api\/bookStore\/books?classId=13&status=1&update=1&page={{page}}\n历史▪月结::\/api\/bookStore\/books?classId=14&status=1&update=1&page={{page}}\n次元▪月结::\/api\/bookStore\/books?classId=15&status=1&update=1&page={{page}}\n同人▪月结::\/api\/bookStore\/books?classId=16&status=1&update=1&page={{page}}\n轻文▪月结::\/api\/bookStore\/books?classId=27&status=1&update=1&page={{page}}\n综合▪月结::\/api\/bookStore\/books?classId=28&status=1&update=1&page={{page}}\n其他▪月结::\/api\/bookStore\/books?classId=29&status=1&update=1&page={{page}}",
+    "lastUpdateTime": 1615905070050,
+    "loginUrl": "",
+    "ruleBookInfo": {
+        "author": "bookInfo.author",
+        "init": "data",
+        "intro": "bookInfo.introduction##(^|[。；！？…]+”?(?=\\w))##$1<br>",
+        "kind": "bookSource[0].siteName&&bookInfo.tags##[\\u4e00-\\u9fa5A-Za-z]+\\-",
+        "lastChapter": "",
+        "name": "bookInfo.title",
+        "tocUrl": "\/api\/book\/{$.bookInfo._id}\/comment?type=&page=1",
+        "wordCount": ""
+    },
+    "ruleContent": {
+        "content": "<js>\nfunction parseComments(n){\n  for(var c=[],e=0;e<n.length;e++){\n    var o=n[e];\n    c.push(\"书友：\".concat(o.createrId.userName,\"\\n时间：\").concat(o.createdAt.slice(0,10),\"\\n评分：\").concat(\"🌟\".repeat(o.score),\"\\n评语：\").concat(o.content.replace(\/([。；！？—…]”?)([\\u4e00-\\u9fa5][^。！？—…]{9})\/g,\"$1\\n$2\")))\n  }\n  return c.join(\"\\n————\\n\");\n}\nvar data = JSON.parse(result);\ndata.data.comments.length === 0;\ndata.data.comments.length === 0 ? '还没有人对这本书发表评价哦！<br>': parseComments(data.data.comments);\n<\/js>",
+        "replaceRegex": ""
+    },
+    "ruleExplore": {
+        "author": "",
+        "bookList": "",
+        "bookUrl": "",
+        "coverUrl": "",
+        "intro": "",
+        "kind": "",
+        "lastChapter": "",
+        "name": "",
+        "wordCount": ""
+    },
+    "ruleSearch": {
+        "author": "author##<[^<>]+>",
+        "bookList": "data||data.books",
+        "bookUrl": "\/api\/book\/{$.bookId}",
+        "coverUrl": "cover##qidian\\.qpic\\.cn##bookcover.yuewen.com",
+        "intro": "",
+        "kind": "tags##[\\u4e00-\\u9fa5A-Za-z]+\\-",
+        "lastChapter": "score@put:{updateAt:$.updateAt}<js>\nvar score = result ==\"0\"? \"【无人评价】\": \"好评率\"+(result > 10 ? result:result*10)+\"%\";\n\"@get:{updateAt}\".slice(0,10)+\"▪\"+score;\n<\/js>",
+        "name": "title",
+        "wordCount": "countWord##\\.\\d+"
+    },
+    "ruleToc": {
+        "chapterList": "<js>\nvar data = JSON.parse(result).data;\nvar pageSize = data.comments.length;\nvar pageCount = Math.ceil(data.total\/pageSize) || 1; \/\/ NaN\nvar list = Array.from(Array(pageCount).keys());\nfor(var i = 0; i <(pageCount>2 ? 2 : pageCount); i++){\n  var index = list[i]+1;\n  list[i] = {title:'第00' + index +'页', url: baseUrl.split('?')[0] + '?type=&page=' + index + '&t='+Date.now()};\n}\nlist;\n<\/js>",
+        "chapterName": "title",
+        "chapterUrl": "url"
+    },
+    "searchUrl": "\/api\/search?page={{page}}&type={{key.replace(\/^(?![@#])(.+)\/,\"title&value=$1\").replace(\/^[@#](.+)\/,\"author&value=$1\")}}",
+    "weight": 0
+}
+源仓库 ku.mumuceo.com © 2019-202
